@@ -7,10 +7,8 @@
 
 {
   // ── Gateway ──────────────────────────────────────────────────
-  gateway: {
-    host: "127.0.0.1",          // localhost only — not exposed to your WiFi
-    port: 18789,                // default OpenClaw gateway port
-  },
+  // OpenClaw binds to localhost (127.0.0.1) by default.
+  // Port 18789 is the default — no need to set it explicitly.
 
   // ── Agents ───────────────────────────────────────────────────
   agents: {

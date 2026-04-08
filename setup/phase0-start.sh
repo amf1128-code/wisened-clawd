@@ -74,11 +74,14 @@ echo ""
 
 # ── Validate config ────────────────────────────────────────────
 echo -e "${BLUE}[Validate]${NC} Checking configuration..."
-if openclaw doctor 2>&1 | grep -qi "error\|fatal"; then
-    echo -e "  ${YELLOW}Config issues detected. Running auto-fix...${NC}"
-    openclaw doctor --fix --yes 2>&1 | head -20
+# Quick validate with a 15-second timeout (doctor can hang on first run)
+DOCTOR_OUT=$(timeout 15 openclaw doctor 2>&1 || true)
+if echo "$DOCTOR_OUT" | grep -qi "error\|fatal\|invalid"; then
+    echo -e "  ${YELLOW}Config issues detected. Attempting auto-fix...${NC}"
+    timeout 15 openclaw doctor --fix --yes 2>&1 | head -20 || true
+else
+    echo -e "  ✓ Configuration OK"
 fi
-echo -e "  ✓ Configuration OK"
 echo ""
 
 # ── Start gateway ──────────────────────────────────────────────
