@@ -1,0 +1,137 @@
+// OpenClaw configuration for Personal AI Assistant
+// Copy this to ~/.openclaw/openclaw.json after filling in your values.
+//
+// This is JSON5 format — comments and trailing commas are OK.
+// OpenClaw validates strictly: unknown keys will prevent startup.
+// Run `openclaw doctor` if the gateway won't start.
+
+{
+  // ── Gateway ──────────────────────────────────────────────────
+  gateway: {
+    host: "127.0.0.1",          // localhost only — not exposed to your WiFi
+    port: 18789,                // default OpenClaw gateway port
+  },
+
+  // ── Agents ───────────────────────────────────────────────────
+  agents: {
+    defaults: {
+      workspace: "~/.openclaw/workspace",
+
+      // Primary model: local Gemma 4 E4B via Ollama
+      model: {
+        primary: "ollama/gemma4:e4b-it-q8_0",
+      },
+
+      // Sandbox: strict security from day one
+      sandbox: {
+        mode: "all",            // sandbox every agent
+        scope: "session",
+        workspaceAccess: "ro",  // read-only workspace access
+        docker: {
+          network: "none",      // no network access from sandbox
+          readOnlyRoot: true,
+          capDrop: ["ALL"],
+          pidsLimit: 128,
+          memory: "512m",
+        },
+      },
+    },
+
+    list: [
+      { id: "main", default: true },
+    ],
+  },
+
+  // ── Models ───────────────────────────────────────────────────
+  models: {
+    mode: "merge",
+    providers: {
+      ollama: {
+        baseUrl: "http://127.0.0.1:11434/v1",
+        apiKey: "ollama",                       // Ollama doesn't need a real key
+        api: "openai-responses",
+        models: [
+          {
+            id: "gemma4:e4b-it-q8_0",
+            name: "Gemma 4 E4B (8-bit, local)",
+            reasoning: false,
+            input: ["text", "image"],           // E4B supports images
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+            contextWindow: 32768,
+            contextTokens: 28672,
+            maxTokens: 8192,
+          },
+          // Fallback: 4-bit quantization if 8-bit is too heavy on 16GB RAM
+          {
+            id: "gemma4:e4b-it-q4_K_M",
+            name: "Gemma 4 E4B (4-bit, local)",
+            reasoning: false,
+            input: ["text", "image"],
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+            contextWindow: 32768,
+            contextTokens: 28672,
+            maxTokens: 8192,
+          },
+        ],
+      },
+      // ── Cloud fallback (Phase 1 — uncomment when you have an API key) ──
+      // anthropic: {
+      //   baseUrl: "https://api.anthropic.com",
+      //   apiKey: { source: "env", provider: "default", id: "ANTHROPIC_API_KEY" },
+      //   api: "anthropic-messages",
+      //   models: [
+      //     {
+      //       id: "claude-sonnet-4-20250514",
+      //       name: "Claude Sonnet 4 (cloud)",
+      //       reasoning: true,
+      //       input: ["text", "image"],
+      //       contextWindow: 200000,
+      //       maxTokens: 8192,
+      //     },
+      //   ],
+      // },
+    },
+  },
+
+  // ── Channels ─────────────────────────────────────────────────
+  channels: {
+    telegram: {
+      enabled: true,
+      // Replace with your bot token from @BotFather:
+      botToken: { source: "env", provider: "default", id: "TELEGRAM_BOT_TOKEN" },
+      dmPolicy: "pairing",     // require pairing approval for new DMs
+      groups: {
+        "*": { requireMention: true },
+      },
+    },
+  },
+
+  // ── Approvals ────────────────────────────────────────────────
+  approvals: {
+    exec: {
+      enabled: true,
+      mode: "session",
+    },
+  },
+
+  // ── Tools ────────────────────────────────────────────────────
+  tools: {
+    exec: {
+      security: "allowlist",   // only whitelisted commands can run
+      ask: "always",           // always ask before executing
+    },
+  },
+
+  // ── MCP Servers (Phase 1 — MemPalace) ───────────────────────
+  // mcp: {
+  //   servers: {
+  //     mempalace: {
+  //       command: "mempalace",
+  //       args: ["mcp-serve"],
+  //       env: {
+  //         MEMPALACE_DIR: "~/.mempalace/palace",
+  //       },
+  //     },
+  //   },
+  // },
+}

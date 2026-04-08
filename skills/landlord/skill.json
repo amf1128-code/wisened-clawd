@@ -1,0 +1,27 @@
+{
+  "name": "landlord",
+  "version": "1.0.0",
+  "description": "Property management: tenant communications, maintenance tracking, rent management, contractor coordination",
+  "triggers": {
+    "commands": ["landlord", "tenant", "maintenance", "rent"],
+    "schedule": "0 9 * * *",
+    "events": ["email_received:landlord", "action_created:landlord"]
+  },
+  "mempalace": {
+    "wing": "landlord",
+    "rooms": ["tenants", "maintenance", "contractors", "rent", "communications"]
+  },
+  "models": {
+    "local": true,
+    "cloud": true,
+    "cloudTasks": ["email_draft", "multi_party_coordination", "complex_reasoning"]
+  },
+  "approvalRequired": true,
+  "actions": [
+    "draft_tenant_email",
+    "draft_contractor_email",
+    "create_maintenance_ticket",
+    "schedule_followup",
+    "create_calendar_event"
+  ]
+}

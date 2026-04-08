@@ -1,0 +1,25 @@
+{
+  "name": "plants",
+  "version": "1.0.0",
+  "description": "Plant care: inventory tracking, photo health analysis, watering/care reminders",
+  "triggers": {
+    "commands": ["plant", "plants", "water", "garden"],
+    "schedule": "0 8 * * *",
+    "events": ["photo_received:plants"]
+  },
+  "mempalace": {
+    "wing": "health",
+    "rooms": ["plants"]
+  },
+  "models": {
+    "local": true,
+    "cloud": true,
+    "cloudTasks": ["image_analysis", "plant_diagnosis"]
+  },
+  "approvalRequired": false,
+  "actions": [
+    "care_reminder",
+    "health_report",
+    "update_care_schedule"
+  ]
+}

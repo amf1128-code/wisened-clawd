@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "notifyOnTrigger": true,
+  "settings": {
+    "rentReminderDaysBefore": 3,
+    "followupHours": 48,
+    "autoAcknowledge": true,
+    "units": []
+  }
+}

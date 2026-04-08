@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Queued Memory Writes (Phone → Mac sync)",
+  "description": "Schema for offline memory writes from the iOS app. Writes are stored locally on the phone and synced to MemPalace when the Mac comes back online. Defined in Phase 1, implemented in Phase 6.",
+  "type": "object",
+  "properties": {
+    "queued_memories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "wing", "content", "source"],
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the memory was created on the phone"
+          },
+          "wing": {
+            "type": "string",
+            "enum": ["landlord", "personal", "health", "fitness", "work", "career", "side-projects", "finance"],
+            "description": "Which MemPalace wing this belongs to"
+          },
+          "room": {
+            "type": "string",
+            "description": "Optional: specific room within the wing"
+          },
+          "content": {
+            "type": "string",
+            "description": "The memory content to store"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["user_input", "siri", "notification", "auto_detected"],
+            "description": "How this memory was captured"
+          },
+          "synced": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this has been synced to MemPalace on the Mac"
+          },
+          "synced_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this was synced (null if not yet synced)"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "notifyOnTrigger": true,
+  "settings": {
+    "dailyReminderTime": "08:00",
+    "plants": []
+  }
+}

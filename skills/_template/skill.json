@@ -1,0 +1,21 @@
+{
+  "name": "SKILL_NAME",
+  "version": "1.0.0",
+  "description": "SKILL_DESCRIPTION",
+  "triggers": {
+    "commands": [],
+    "schedule": null,
+    "events": []
+  },
+  "mempalace": {
+    "wing": "WING_NAME",
+    "rooms": []
+  },
+  "models": {
+    "local": true,
+    "cloud": false,
+    "cloudTasks": []
+  },
+  "approvalRequired": true,
+  "actions": []
+}

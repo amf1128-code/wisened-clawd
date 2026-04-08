@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+dashboard/frontend/build/
+
+# Environment files with secrets
+.env
+*.env.local
+
+# SQLite databases (contain personal data)
+*.db
+*.db-shm
+*.db-wal
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Snapshots (generated, not source)
+snapshots/
+
+# Credential files
+*-creds.json
+client_secret*.json
